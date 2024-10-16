@@ -21,10 +21,12 @@ import Color from '@tiptap/extension-color';
 import Link from '@tiptap/extension-link';
 import ListItem from '@tiptap/extension-list-item';
 import Placeholder from '@tiptap/extension-placeholder';
+import TextStyle from '@tiptap/extension-text-style';
 import Bubble from './bubbleMenu';
 const Tiptap = () => {
   const editor = useEditor({
     extensions: [
+      TextStyle,
       Bold,
       Italic,
       Strike,
@@ -76,17 +78,17 @@ const Tiptap = () => {
     editorProps: {
       attributes: {
         class:
-          'prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none bg-slate-800 text-slate-200 p-2 rounded-md',
+          'min-w-full h-full prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none bg-slate-800 text-slate-200 p-2 rounded-md',
       },
     },
     immediatelyRender: false,
   });
 
   return (
-    <>
+    <div className="w-full h-full">
       <Bubble editor={editor} />
       <EditorContent editor={editor} />
-    </>
+    </div>
   );
 };
 
