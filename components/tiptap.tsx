@@ -1,107 +1,43 @@
-'use client';
-
-import BlockQuote from '@tiptap/extension-blockquote';
-import Bold from '@tiptap/extension-bold';
-import BulletList from '@tiptap/extension-bullet-list';
-import Code from '@tiptap/extension-code';
-import Document from '@tiptap/extension-document';
-import Heading from '@tiptap/extension-heading';
-import Italic from '@tiptap/extension-italic';
-import OrderedList from '@tiptap/extension-ordered-list';
-import Paragraph from '@tiptap/extension-paragraph';
-import Strike from '@tiptap/extension-strike';
-import Text from '@tiptap/extension-text';
-import { EditorContent, useEditor } from '@tiptap/react';
-
-import Details from '@tiptap-pro/extension-details';
-import DetailsContent from '@tiptap-pro/extension-details-content';
-import DetailsSummary from '@tiptap-pro/extension-details-summary';
-import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji';
-import Color from '@tiptap/extension-color';
-import Gapcursor from '@tiptap/extension-gapcursor';
-import Link from '@tiptap/extension-link';
-import ListItem from '@tiptap/extension-list-item';
-import Placeholder from '@tiptap/extension-placeholder';
-import Table from '@tiptap/extension-table';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
-import TableRow from '@tiptap/extension-table-row';
-import TextStyle from '@tiptap/extension-text-style';
+import { Editor, EditorContent } from '@tiptap/react';
+import 'katex/dist/katex.min.css';
+import { useRef } from 'react';
 import Bubble from './bubbleMenu';
 import EditorHeader from './editorHeader';
-const Tiptap = () => {
-  const editor = useEditor({
-    extensions: [
-      TextStyle,
-      Bold,
-      Italic,
-      Strike,
-      Document,
-      BlockQuote,
-      BulletList,
-      OrderedList,
-      Paragraph,
-      ListItem,
-      Gapcursor,
-      Heading.configure({
-        HTMLAttributes: {
-          class: 'text-slate-200',
-        },
-      }),
-      Text,
-      Code.configure({
-        HTMLAttributes: {
-          class: 'bg-slate-600 text-slate-200 p-1 rounded-md',
-        },
-      }),
-      Details,
-      DetailsContent,
-      DetailsSummary,
-      DetailsContent,
-      Placeholder.configure({
-        includeChildren: true,
-        placeholder: ({ node }) => {
-          if (node.type.name === 'detailsSummary') {
-            return 'Summary';
-          }
+import { Button } from './ui/button';
 
-          return '';
-        },
-      }),
-      Emoji.configure({
-        emojis: gitHubEmojis,
-      }),
-      Link.configure({
-        HTMLAttributes: {
-          class: 'text-blue-500',
-        },
-        openOnClick: false,
-        autolink: true,
-        defaultProtocol: 'https',
-      }),
-      Color,
-      Table.configure({
-        resizable: true,
-      }),
-      TableRow,
-      TableHeader,
-      TableCell,
-    ],
-    content: '<p>Hello World</p>',
-    editorProps: {
-      attributes: {
-        class:
-          'tiptap min-w-full h-full prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none bg-slate-800 text-slate-200 p-2 rounded-md',
-      },
-    },
-    immediatelyRender: false,
-  });
+const Tiptap = ({ editor }: { editor: Editor }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="w-full h-full">
-      <EditorHeader editor={editor} />
-      <Bubble editor={editor} />
-      <EditorContent editor={editor} />
+    <div className="w-full h-full flex flex-col justify-between overflow-y-auto">
+      <div>
+        <EditorHeader editor={editor} />
+        <Bubble editor={editor} />
+        <EditorContent editor={editor} />
+      </div>
+      <div className="flex gap-2">
+        <Button className="w-fit" onClick={() => inputRef.current?.click()}>
+          Import
+        </Button>
+        <Button
+          className="w-fit"
+          onClick={() => editor?.chain().focus().export({ format: 'md' }).run()}
+        >
+          Export
+        </Button>
+      </div>
+      <input
+        type="file"
+        accept=".md"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            editor?.chain().focus().import({ file }).run();
+          }
+        }}
+        ref={inputRef}
+      />
     </div>
   );
 };

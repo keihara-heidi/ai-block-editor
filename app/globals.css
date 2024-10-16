@@ -119,4 +119,31 @@ body {
   p {
     @apply m-0;
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply m-0;
+  }
+
+  /* Mathematics extension styles */
+  /* Mathematics extension styles */
+  .Tiptap-mathematics-editor {
+    @apply bg-slate-700 text-white font-mono px-2 py-1 rounded inline-block;
+  }
+
+  .Tiptap-mathematics-render {
+    @apply px-1 inline-block rounded;
+  }
+
+  .Tiptap-mathematics-render--editable {
+    @apply cursor-pointer transition duration-200;
+  }
+
+  .Tiptap-mathematics-render--editable:hover {
+    @apply bg-slate-600;
+  }
 }
