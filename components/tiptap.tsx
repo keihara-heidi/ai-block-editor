@@ -18,11 +18,17 @@ import DetailsContent from '@tiptap-pro/extension-details-content';
 import DetailsSummary from '@tiptap-pro/extension-details-summary';
 import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji';
 import Color from '@tiptap/extension-color';
+import Gapcursor from '@tiptap/extension-gapcursor';
 import Link from '@tiptap/extension-link';
 import ListItem from '@tiptap/extension-list-item';
 import Placeholder from '@tiptap/extension-placeholder';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
 import TextStyle from '@tiptap/extension-text-style';
 import Bubble from './bubbleMenu';
+import EditorHeader from './editorHeader';
 const Tiptap = () => {
   const editor = useEditor({
     extensions: [
@@ -36,6 +42,7 @@ const Tiptap = () => {
       OrderedList,
       Paragraph,
       ListItem,
+      Gapcursor,
       Heading.configure({
         HTMLAttributes: {
           class: 'text-slate-200',
@@ -73,12 +80,18 @@ const Tiptap = () => {
         defaultProtocol: 'https',
       }),
       Color,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: '<p>Hello World</p>',
     editorProps: {
       attributes: {
         class:
-          'min-w-full h-full prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none bg-slate-800 text-slate-200 p-2 rounded-md',
+          'tiptap min-w-full h-full prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none bg-slate-800 text-slate-200 p-2 rounded-md',
       },
     },
     immediatelyRender: false,
@@ -86,6 +99,7 @@ const Tiptap = () => {
 
   return (
     <div className="w-full h-full">
+      <EditorHeader editor={editor} />
       <Bubble editor={editor} />
       <EditorContent editor={editor} />
     </div>
