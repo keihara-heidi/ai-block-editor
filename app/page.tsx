@@ -113,48 +113,7 @@ export default function Home() {
       Mathematics,
     ],
     content: `
-      <span style="color: #dc2626">Question 1</span>
-## Problem title: \[title\]
-
-### Description: \[description\]
-
-<table style="minWidth: 50px">
-<tbody>
-<tr class="header">
-<th><p>Base case</p></th>
-<th><p>Inductive Step</p></th>
-</tr>
-&#10;<tr class="odd">
-<td><p>[base case]</p></td>
-<td><p>[inductive step]</p></td>
-</tr>
-</tbody>
-</table>
-
-Conclusion \[conclusion\]
-
-<span style="color: #2563eb">Question 2</span>
-
-## Problem title: \[title\]
-
-### Description: \[description\]
-
-"prove using cases insert more column/row if necessary"
-
-<table style="minWidth: 50px">
-<tbody>
-<tr class="header">
-<th><p>Cases 1</p></th>
-<th><p>case 2</p></th>
-</tr>
-&#10;<tr class="odd">
-<td><p>[case 1]</p></td>
-<td><p>[case 2]</p></td>
-</tr>
-</tbody>
-</table>
-
-Conclusion \[conclusion\]
+      Hello world
     `,
     editorProps: {
       attributes: {
