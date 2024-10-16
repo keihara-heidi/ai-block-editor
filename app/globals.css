@@ -78,46 +78,72 @@ body {
 }
 
 .tiptap {
+  /* First child margin-top reset */
   > *:first-child {
-    @apply mt-0;
+    margin-top: 0;
   }
 
   /* Table-specific styling */
   table {
-    @apply border-collapse m-0 overflow-hidden table-fixed w-full;
+    border-collapse: collapse;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+  }
 
-    td,
-    th {
-      @apply border border-gray-300 box-border min-w-[1em] p-2 relative align-top;
+  td,
+  th {
+    border: 1px solid #d1d5db; /* Equivalent to border-gray-300 */
+    box-sizing: border-box;
+    min-width: 1em;
+    padding: 0.5rem; /* Equivalent to p-2 */
+    position: relative;
+    vertical-align: top;
+  }
 
-      > * {
-        @apply mb-0;
-      }
-    }
+  td > *,
+  th > * {
+    margin-bottom: 0;
+  }
 
-    th {
-      @apply bg-slate-700 font-bold text-left;
-    }
+  th {
+    background-color: #374151; /* Equivalent to bg-slate-700 */
+    font-weight: bold;
+    text-align: left;
+  }
 
-    .selectedCell:after {
-      @apply bg-gray-400 content-[''] absolute inset-0 pointer-events-none z-[2];
-    }
+  .selectedCell:after {
+    background-color: #9ca3af; /* Equivalent to bg-gray-400 */
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
 
-    .column-resize-handle {
-      @apply bg-purple-500 absolute bottom-[-2px] pointer-events-none right-[-2px] top-0 w-1;
-    }
+  .column-resize-handle {
+    background-color: #a855f7; /* Equivalent to bg-purple-500 */
+    position: absolute;
+    bottom: -2px;
+    pointer-events: none;
+    right: -2px;
+    top: 0;
+    width: 1px;
   }
 
   .tableWrapper {
-    @apply my-6 overflow-x-auto;
+    margin-top: 1.5rem; /* Equivalent to my-6 */
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
   }
 
   &.resize-cursor {
-    @apply cursor-col-resize;
+    cursor: col-resize;
   }
 
   p {
-    @apply m-0;
+    margin: 0;
   }
 
   h1,
@@ -126,24 +152,35 @@ body {
   h4,
   h5,
   h6 {
-    @apply m-0;
+    margin: 0;
   }
 
   /* Mathematics extension styles */
-  /* Mathematics extension styles */
   .Tiptap-mathematics-editor {
-    @apply bg-slate-700 text-white font-mono px-2 py-1 rounded inline-block;
+    background-color: #374151; /* Equivalent to bg-slate-700 */
+    color: white;
+    font-family: monospace;
+    padding-left: 0.5rem; /* Equivalent to px-2 */
+    padding-right: 0.5rem;
+    padding-top: 0.25rem; /* Equivalent to py-1 */
+    padding-bottom: 0.25rem;
+    border-radius: 0.25rem; /* Equivalent to rounded */
+    display: inline-block;
   }
 
   .Tiptap-mathematics-render {
-    @apply px-1 inline-block rounded;
+    padding-left: 0.25rem; /* Equivalent to px-1 */
+    padding-right: 0.25rem;
+    display: inline-block;
+    border-radius: 0.25rem;
   }
 
   .Tiptap-mathematics-render--editable {
-    @apply cursor-pointer transition duration-200;
+    cursor: pointer;
+    transition: all 0.2s;
   }
 
   .Tiptap-mathematics-render--editable:hover {
-    @apply bg-slate-600;
+    background-color: #4b5563; /* Equivalent to bg-slate-600 */
   }
 }
