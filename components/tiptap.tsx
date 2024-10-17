@@ -25,6 +25,13 @@ const Tiptap = ({ editor }: { editor: Editor }) => {
         >
           Export
         </Button>
+        <Button
+          onClick={() => {
+            console.log(editor?.getHTML());
+          }}
+        >
+          Log as HTML
+        </Button>
       </div>
       <input
         type="file"
