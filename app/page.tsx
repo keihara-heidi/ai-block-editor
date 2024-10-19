@@ -32,11 +32,13 @@ import TableRow from '@tiptap/extension-table-row';
 import TextStyle from '@tiptap/extension-text-style';
 
 import Tiptap from '@/components/tiptap';
+import { Button } from '@/components/ui/button';
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function Home() {
   const editor1 = useEditor({
@@ -186,14 +188,12 @@ export default function Home() {
       TableHeader,
       TableCell,
       Export.configure({
-        appId: 'pkroq07k',
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjkwODI0MjAsIm5iZiI6MTcyOTA4MjQyMCwiZXhwIjoxNzI5MTY4ODIwLCJpc3MiOiJodHRwczovL2Nsb3VkLnRpcHRhcC5kZXYiLCJhdWQiOiJhNmRkYzQ4My1mM2U3LTRhMTQtOTk4NC1mNDAwOWZjYjc5YWQifQ.XLb7dyrRawJcMTP4bEsDkUKQleiqrqBsKrZkHCHwKRA',
+        appId: process.env.TIPTAP_APP_ID,
+        token: process.env.TIPTAP_JWT,
       }),
       Import.configure({
-        appId: 'pkroq07k',
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjkwODI0MjAsIm5iZiI6MTcyOTA4MjQyMCwiZXhwIjoxNzI5MTY4ODIwLCJpc3MiOiJodHRwczovL2Nsb3VkLnRpcHRhcC5kZXYiLCJhdWQiOiJhNmRkYzQ4My1mM2U3LTRhMTQtOTk4NC1mNDAwOWZjYjc5YWQifQ.XLb7dyrRawJcMTP4bEsDkUKQleiqrqBsKrZkHCHwKRA',
+        appId: process.env.TIPTAP_APP_ID,
+        token: process.env.TIPTAP_JWT,
       }),
       Mathematics,
     ],
@@ -222,6 +222,13 @@ export default function Home() {
               <Tiptap editor={editor2} />
             </ResizablePanel>
           </ResizablePanelGroup>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={30} className="w-full h-full flex items-center">
+          <div className="w-full h-full p-2">
+            <Textarea className="h-full bg-slate-800 text-slate-200" />
+          </div>
+          <Button>Generate</Button>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
