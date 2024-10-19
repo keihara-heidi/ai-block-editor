@@ -15,7 +15,7 @@ const Tiptap = ({ editor }: { editor: Editor }) => {
         <Bubble editor={editor} />
         <EditorContent editor={editor} />
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <Button className="w-fit" onClick={() => inputRef.current?.click()}>
           Import
         </Button>
@@ -31,6 +31,22 @@ const Tiptap = ({ editor }: { editor: Editor }) => {
           }}
         >
           Log as HTML
+        </Button>
+        <Button
+          onClick={() => {
+            navigator.clipboard.writeText(editor?.getHTML() || '');
+          }}
+        >
+          Copy as html
+        </Button>
+        <Button
+          onClick={() => {
+            navigator.clipboard.readText().then((text) => {
+              editor?.commands.setContent(text);
+            });
+          }}
+        >
+          Paste as html
         </Button>
       </div>
       <input

@@ -38,7 +38,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import { Textarea } from '@/components/ui/textarea';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -212,7 +211,6 @@ export default function Home() {
     immediatelyRender: false,
   });
 
-  const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const onGenerate = async () => {
     setIsLoading(true);
@@ -221,7 +219,10 @@ export default function Home() {
     try {
       const response = await axios.post(
         '/api/fillTemplate',
-        { prompt, template },
+        {
+          prompt: editor2?.getHTML(),
+          template,
+        },
         {
           responseType: 'stream',
           onDownloadProgress: (progressEvent) => {
@@ -246,30 +247,21 @@ export default function Home() {
   return (
     <div className="h-screen w-full">
       <ResizablePanelGroup direction="vertical">
-        <ResizablePanel defaultSize={70}>
+        <ResizablePanel>
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel defaultSize={50}>
               <Tiptap editor={editor1} />
             </ResizablePanel>
             <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={50}>
+            <ResizablePanel defaultSize={50} className="flex flex-col gap-2">
               <Tiptap editor={editor2} />
+              <Button onClick={onGenerate} disabled={isLoading} className="w-fit">
+                {isLoading ? 'Generating...' : 'Generate'}
+              </Button>
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={30} className="w-full h-full flex items-center">
-          <div className="w-full h-full p-2">
-            <Textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              className="h-full bg-slate-800 text-slate-200"
-            />
-          </div>
-          <Button onClick={onGenerate} disabled={isLoading}>
-            {isLoading ? 'Generating...' : 'Generate'}
-          </Button>
-        </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );
