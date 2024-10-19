@@ -13,9 +13,6 @@ import Strike from '@tiptap/extension-strike';
 import Text from '@tiptap/extension-text';
 import { useEditor } from '@tiptap/react';
 
-import Details from '@tiptap-pro/extension-details';
-import DetailsContent from '@tiptap-pro/extension-details-content';
-import DetailsSummary from '@tiptap-pro/extension-details-summary';
 import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji';
 import Export from '@tiptap-pro/extension-export';
 import Import from '@tiptap-pro/extension-import';
@@ -38,7 +35,8 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import { useState } from 'react';
+import { useCompletion } from 'ai/react';
+import { useEffect } from 'react';
 
 export default function Home() {
   const editor1 = useEditor({
@@ -63,25 +61,6 @@ export default function Home() {
       Code.configure({
         HTMLAttributes: {
           class: 'bg-slate-600 text-slate-200 p-1 rounded-md',
-        },
-      }),
-      Details.configure({
-        persist: true,
-        HTMLAttributes: {
-          class: 'details',
-        },
-      }),
-      DetailsContent,
-      DetailsSummary,
-      DetailsContent,
-      Placeholder.configure({
-        includeChildren: true,
-        placeholder: ({ node }) => {
-          if (node.type.name === 'detailsSummary') {
-            return 'Summary';
-          }
-
-          return '';
         },
       }),
       Emoji.configure({
@@ -148,15 +127,6 @@ export default function Home() {
           class: 'bg-slate-600 text-slate-200 p-1 rounded-md',
         },
       }),
-      Details.configure({
-        persist: true,
-        HTMLAttributes: {
-          class: 'details',
-        },
-      }),
-      DetailsContent,
-      DetailsSummary,
-      DetailsContent,
       Placeholder.configure({
         includeChildren: true,
         placeholder: ({ node }) => {
@@ -206,47 +176,25 @@ export default function Home() {
     immediatelyRender: false,
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-  const onGenerate = async () => {
-    setIsLoading(true);
-    const template = editor1?.getHTML() || '';
+  const { completion, complete, isLoading } = useCompletion({
+    api: '/api/fillTemplate',
+  });
 
-    try {
-      const response = await fetch('/api/fillTemplate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt: editor2?.getHTML(),
-          template,
-        }),
-      });
-
-      if (!response.body) {
-        throw new Error('No response body');
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let content = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        content += decoder.decode(value, { stream: true });
-        editor2?.commands.setContent(content, false); // Stream content update
-      }
-
-      // Final update after stream ends
-      editor2?.commands.setContent(content);
-    } catch (error) {
-      console.error('Error generating content:', error);
-      editor2?.commands.setContent('Error generating content. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+  const onGenerate = () => {
+    complete('', {
+      body: {
+        prompt: editor1?.getHTML(),
+        template: editor2?.getHTML(),
+      },
+    });
   };
+
+  useEffect(() => {
+    if (completion) {
+      console.log(completion);
+      editor2?.commands.setContent(completion.replace('```html', '').replace('```', ''));
+    }
+  }, [completion]);
 
   if (!editor1 || !editor2) return null;
 
