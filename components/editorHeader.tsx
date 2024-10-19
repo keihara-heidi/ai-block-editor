@@ -37,38 +37,6 @@ const EditorHeader = ({ editor }: { editor: Editor | null }) => {
         <Button onClick={() => editor?.chain().focus().deleteTable().run()}>
           Delete table
         </Button>
-        <Button onClick={() => editor?.chain().focus().mergeCells().run()}>
-          Merge cells
-        </Button>
-        <Button onClick={() => editor?.chain().focus().splitCell().run()}>
-          Split cell
-        </Button>
-        <Button onClick={() => editor?.chain().focus().toggleHeaderColumn().run()}>
-          Toggle header column
-        </Button>
-        <Button onClick={() => editor?.chain().focus().toggleHeaderRow().run()}>
-          Toggle header row
-        </Button>
-        <Button onClick={() => editor?.chain().focus().toggleHeaderCell().run()}>
-          Toggle header cell
-        </Button>
-        <Button onClick={() => editor?.chain().focus().mergeOrSplit().run()}>
-          Merge or split
-        </Button>
-        <Button
-          onClick={() => editor?.chain().focus().setCellAttribute('colspan', 2).run()}
-        >
-          Set cell attribute
-        </Button>
-        <Button onClick={() => editor?.chain().focus().fixTables().run()}>
-          Fix tables
-        </Button>
-        <Button onClick={() => editor?.chain().focus().goToNextCell().run()}>
-          Go to next cell
-        </Button>
-        <Button onClick={() => editor?.chain().focus().goToPreviousCell().run()}>
-          Go to previous cell
-        </Button>
       </div>
     </div>
   );
