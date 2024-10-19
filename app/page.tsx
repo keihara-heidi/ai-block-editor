@@ -106,7 +106,11 @@ export default function Home() {
   const editor2 = useEditor({
     extensions: [
       TextStyle,
-      Bold,
+      Bold.configure({
+        HTMLAttributes: {
+          class: 'text-slate-200',
+        },
+      }),
       Italic,
       Strike,
       Document,
