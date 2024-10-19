@@ -119,7 +119,7 @@ export default function Home() {
       Mathematics,
     ],
     content: `
-      Hello world
+      <p><span style="color: #dc2626">Question 1</span></p><h2 class="text-slate-200">Problem title: [title]</h2><h3 class="text-slate-200">Description: [description]</h3><table style="min-width: 50px"><colgroup><col><col></colgroup><tbody><tr><th colspan="1" rowspan="1"><p>Base case</p></th><th colspan="1" rowspan="1"><p>Inductive Step</p></th></tr><tr><td colspan="1" rowspan="1"><p>[base case]</p></td><td colspan="1" rowspan="1"><p>[inductive step]</p></td></tr></tbody></table><p>Conclusion [conclusion]</p><p><span style="color: #2563eb">Question 2</span></p><h2 class="text-slate-200">Problem title: [title]</h2><h3 class="text-slate-200">Description: [description]</h3><table style="min-width: 50px"><colgroup><col><col></colgroup><tbody><tr><th colspan="1" rowspan="1"><p>Cases 1</p></th><th colspan="1" rowspan="1"><p>case 2</p></th></tr><tr><td colspan="1" rowspan="1"><p>[case 1]</p></td><td colspan="1" rowspan="1"><p>[case 2]</p></td></tr></tbody></table><p>Conclusion [conclusion]</p><p></p>
     `,
     editorProps: {
       attributes: {
