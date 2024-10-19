@@ -39,8 +39,15 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
 import { Textarea } from '@/components/ui/textarea';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+  useEffect(() => {
+    console.log(process.env.TIPTAP_APP_ID);
+    console.log(process.env.TIPTAP_JWT);
+  }, []);
+
   const editor1 = useEditor({
     extensions: [
       TextStyle,
@@ -103,14 +110,12 @@ export default function Home() {
       TableHeader,
       TableCell,
       Export.configure({
-        appId: 'pkroq07k',
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjkwODI0MjAsIm5iZiI6MTcyOTA4MjQyMCwiZXhwIjoxNzI5MTY4ODIwLCJpc3MiOiJodHRwczovL2Nsb3VkLnRpcHRhcC5kZXYiLCJhdWQiOiJhNmRkYzQ4My1mM2U3LTRhMTQtOTk4NC1mNDAwOWZjYjc5YWQifQ.XLb7dyrRawJcMTP4bEsDkUKQleiqrqBsKrZkHCHwKRA',
+        appId: process.env.TIPTAP_APP_ID,
+        token: process.env.TIPTAP_JWT,
       }),
       Import.configure({
-        appId: 'pkroq07k',
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjkwODI0MjAsIm5iZiI6MTcyOTA4MjQyMCwiZXhwIjoxNzI5MTY4ODIwLCJpc3MiOiJodHRwczovL2Nsb3VkLnRpcHRhcC5kZXYiLCJhdWQiOiJhNmRkYzQ4My1mM2U3LTRhMTQtOTk4NC1mNDAwOWZjYjc5YWQifQ.XLb7dyrRawJcMTP4bEsDkUKQleiqrqBsKrZkHCHwKRA',
+        appId: process.env.TIPTAP_APP_ID,
+        token: process.env.TIPTAP_JWT,
       }),
       Mathematics,
     ],
@@ -207,6 +212,35 @@ export default function Home() {
     immediatelyRender: false,
   });
 
+  const [prompt, setPrompt] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const onGenerate = async () => {
+    setIsLoading(true);
+    const template = editor1?.getHTML() || '';
+
+    try {
+      const response = await axios.post(
+        '/api/fillTemplate',
+        { prompt, template },
+        {
+          responseType: 'stream',
+          onDownloadProgress: (progressEvent) => {
+            const chunk = progressEvent.event.target.response;
+            editor2?.commands.setContent(chunk, false);
+          },
+        }
+      );
+
+      // Final update after stream ends
+      editor2?.commands.setContent(response.data);
+    } catch (error) {
+      console.error('Error generating content:', error);
+      editor2?.commands.setContent('Error generating content. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   if (!editor1 || !editor2) return null;
 
   return (
@@ -226,9 +260,15 @@ export default function Home() {
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={30} className="w-full h-full flex items-center">
           <div className="w-full h-full p-2">
-            <Textarea className="h-full bg-slate-800 text-slate-200" />
+            <Textarea
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              className="h-full bg-slate-800 text-slate-200"
+            />
           </div>
-          <Button>Generate</Button>
+          <Button onClick={onGenerate} disabled={isLoading}>
+            {isLoading ? 'Generating...' : 'Generate'}
+          </Button>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
