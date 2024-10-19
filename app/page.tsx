@@ -38,15 +38,9 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function Home() {
-  useEffect(() => {
-    console.log(process.env.TIPTAP_APP_ID);
-    console.log(process.env.TIPTAP_JWT);
-  }, []);
-
   const editor1 = useEditor({
     extensions: [
       TextStyle,
@@ -218,23 +212,34 @@ export default function Home() {
     const template = editor1?.getHTML() || '';
 
     try {
-      const response = await axios.post(
-        '/api/fillTemplate',
-        {
+      const response = await fetch('/api/fillTemplate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           prompt: editor2?.getHTML(),
           template,
-        },
-        {
-          responseType: 'stream',
-          onDownloadProgress: (progressEvent) => {
-            const chunk = progressEvent.event.target.response;
-            editor2?.commands.setContent(chunk, false);
-          },
-        }
-      );
+        }),
+      });
+
+      if (!response.body) {
+        throw new Error('No response body');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let content = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        content += decoder.decode(value, { stream: true });
+        editor2?.commands.setContent(content, false); // Stream content update
+      }
 
       // Final update after stream ends
-      editor2?.commands.setContent(response.data);
+      editor2?.commands.setContent(content);
     } catch (error) {
       console.error('Error generating content:', error);
       editor2?.commands.setContent('Error generating content. Please try again.');
