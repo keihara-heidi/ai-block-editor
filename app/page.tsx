@@ -201,7 +201,8 @@ export default function Home() {
       }),
       Mathematics,
     ],
-    content: '<p>Hello World</p>',
+    content:
+      '<p>Prove that $1+5+...+5^{n-1}=\frac{5^n-1}{4}$</p><p></p><p>Prove that the equation $x^2-y^2=10$ has no solution (x, y) such that x and y are both positive integers</p>',
     editorProps: {
       attributes: {
         class:
