@@ -1,4 +1,4 @@
-import { models } from '@/app/page';
+import { models } from '@/app/types';
 import { anthropic } from '@ai-sdk/anthropic';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
