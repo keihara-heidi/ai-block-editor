@@ -16,10 +16,20 @@ import { useEditor } from '@tiptap/react';
 import Tiptap from '@/components/tiptap';
 import { Button } from '@/components/ui/button';
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
+import { cn } from '@/lib/utils';
 import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji';
 import Export from '@tiptap-pro/extension-export';
 import Import from '@tiptap-pro/extension-import';
@@ -35,7 +45,9 @@ import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
 import TextStyle from '@tiptap/extension-text-style';
 import { useCompletion } from 'ai/react';
-import { useEffect } from 'react';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { models, modelsList } from './api/fillTemplate/route';
 
 export default function Home() {
   const editor1 = useEditor({
@@ -182,11 +194,16 @@ export default function Home() {
     api: '/api/fillTemplate',
   });
 
+  const [ai, setAi] = useState<models>('gpt-4o');
+
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
   const onGenerate = () => {
     complete('', {
       body: {
         template: editor1?.getHTML(),
         prompt: editor2?.getHTML(),
+        model: ai,
       },
     });
   };
@@ -211,9 +228,52 @@ export default function Home() {
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50} className="flex flex-col gap-2">
               <Tiptap editor={editor2} />
-              <Button onClick={onGenerate} disabled={isLoading} className="w-fit">
-                {isLoading ? 'Generating...' : 'Generate'}
-              </Button>
+              <div className="flex gap-2 p-2 pt-0">
+                <Button onClick={onGenerate} disabled={isLoading} className="w-fit">
+                  {isLoading ? 'Generating...' : 'Generate'}
+                </Button>
+                <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={isPopoverOpen}
+                      className="w-64 justify-between"
+                    >
+                      {ai ?? 'Select model...'}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-64 max-w-sm p-0">
+                    <Command>
+                      <CommandInput placeholder="Search ai model..." />
+                      <CommandList>
+                        <CommandEmpty>No model found.</CommandEmpty>
+                        <CommandGroup>
+                          {modelsList.map((model) => (
+                            <CommandItem
+                              key={model}
+                              value={model}
+                              onSelect={(currentValue) => {
+                                setAi(currentValue as models);
+                                setIsPopoverOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 h-4 w-4',
+                                  ai === model ? 'opacity-100' : 'opacity-0'
+                                )}
+                              />
+                              {model}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
             </ResizablePanel>
           </ResizablePanelGroup>
         </ResizablePanel>
