@@ -68,3 +68,5 @@ export async function POST(request: NextRequest) {
     return new Response('Internal server error', { status: 500 });
   }
 }
+
+export const dynamic = 'force-dynamic';

@@ -46,10 +46,13 @@ import TableRow from '@tiptap/extension-table-row';
 import TextStyle from '@tiptap/extension-text-style';
 import { useCompletion } from 'ai/react';
 import { Check, ChevronsUpDown } from 'lucide-react';
+import { unstable_noStore as noStore } from 'next/cache';
 import { useEffect, useState } from 'react';
 import { models, modelsList } from './types';
 
 export default function Home() {
+  noStore();
+
   const editor1 = useEditor({
     extensions: [
       TextStyle,
