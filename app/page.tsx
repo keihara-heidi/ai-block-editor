@@ -215,7 +215,7 @@ export default function Home() {
   const lastUpdate = useRef(Date.now());
 
   useEffect(() => {
-    const interval = 500; // delay in milliseconds
+    const interval = 250; // delay in milliseconds
 
     if (completion) {
       const now = Date.now();
