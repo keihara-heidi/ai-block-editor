@@ -47,7 +47,7 @@ import TextStyle from '@tiptap/extension-text-style';
 import { useCompletion } from 'ai/react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { unstable_noStore as noStore } from 'next/cache';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { models, modelsList } from './types';
 
 export default function Home() {
@@ -211,16 +211,20 @@ export default function Home() {
     });
   };
 
+  // Ref to store the last time content was updated
+  const lastUpdate = useRef(Date.now());
+
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (completion) {
+    const interval = 500; // delay in milliseconds
+
+    if (completion) {
+      const now = Date.now();
+      if (now - lastUpdate.current > interval) {
         console.log(completion);
         editor2?.commands.setContent(completion);
+        lastUpdate.current = now; // Update the timestamp
       }
-    }, 1000); // Update every 1000ms (1 second)
-
-    // Cleanup function to clear the interval when component unmounts
-    return () => clearInterval(timer);
+    }
   }, [completion]);
 
   if (!editor1 || !editor2) return null;
