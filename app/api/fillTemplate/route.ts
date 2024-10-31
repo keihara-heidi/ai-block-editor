@@ -4,6 +4,8 @@ import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { NextRequest } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export type FillTemplateRequest = {
   prompt: string;
   template: string;
@@ -68,5 +70,3 @@ export async function POST(request: NextRequest) {
     return new Response('Internal server error', { status: 500 });
   }
 }
-
-export const dynamic = 'force-dynamic';
