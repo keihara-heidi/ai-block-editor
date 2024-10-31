@@ -212,10 +212,15 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (completion) {
-      console.log(completion);
-      editor2?.commands.setContent(completion);
-    }
+    const timer = setInterval(() => {
+      if (completion) {
+        console.log(completion);
+        editor2?.commands.setContent(completion);
+      }
+    }, 1000); // Update every 1000ms (1 second)
+
+    // Cleanup function to clear the interval when component unmounts
+    return () => clearInterval(timer);
   }, [completion]);
 
   if (!editor1 || !editor2) return null;
