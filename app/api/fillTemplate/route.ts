@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 import { models } from '@/app/types';
 import { anthropic } from '@ai-sdk/anthropic';
 import { openai } from '@ai-sdk/openai';
@@ -10,6 +9,8 @@ export type FillTemplateRequest = {
   template: string;
   model: models;
 };
+export const dynamic = 'force-dynamic';
+export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
   try {
