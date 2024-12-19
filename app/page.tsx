@@ -48,6 +48,7 @@ import { useCompletion } from 'ai/react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { unstable_noStore as noStore } from 'next/cache';
 import { useEffect, useRef, useState } from 'react';
+import { Markdown } from 'tiptap-markdown';
 import { models, modelsList } from './types';
 
 export default function Home() {
@@ -66,6 +67,7 @@ export default function Home() {
       Paragraph,
       ListItem,
       Gapcursor,
+      Markdown,
       Heading.configure({
         HTMLAttributes: {
           class: 'text-slate-200',
@@ -119,6 +121,7 @@ export default function Home() {
 
   const editor2 = useEditor({
     extensions: [
+      Markdown,
       TextStyle,
       Bold.configure({
         HTMLAttributes: {

@@ -48,6 +48,22 @@ const Tiptap = ({ editor }: { editor: Editor }) => {
         >
           Paste as html
         </Button>
+        <Button
+          onClick={() => {
+            navigator.clipboard.writeText(editor.storage.markdown.getMarkdown());
+          }}
+        >
+          Copy as md
+        </Button>
+        <Button
+          onClick={() => {
+            navigator.clipboard.readText().then((text) => {
+              editor?.commands.setContent(text);
+            });
+          }}
+        >
+          Paste as md
+        </Button>
       </div>
       <input
         type="file"
